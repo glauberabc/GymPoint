@@ -1,5 +1,10 @@
 {
   "execMap": {
-    "js": "node -r sucrase/register"
+    "js": "node -r sucrase/register",
+    "events": {
+      "restart": "kill-port 3333",
+      "crash": "kill-port 3333"
+    },
+    "delay": "1500"
   }
 }
