@@ -1,10 +1,28 @@
 import * as Yup from 'yup';
 import Student from '../models/Student';
+import File from '../models/File';
 
 class StudentController {
   async index(req, res) {
     try {
-      const student = await Student.findAll();
+      const student = await Student.findAll({
+        attributes: [
+          'id',
+          'name',
+          'email',
+          'age',
+          'weight',
+          'height',
+          'avatar_id',
+        ],
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['name', 'path', 'url'],
+          },
+        ],
+      });
 
       return res.status(200).json(student);
     } catch (error) {
@@ -95,18 +113,18 @@ class StudentController {
 
   async destroy(req, res) {
     const { id } = req.params;
-    const user = await Student.findByPk(id);
+    const student = await Student.findByPk(id);
 
-    if (!user) {
+    if (!student) {
       return res.status(400).json({ error: 'Student not found.' });
     }
 
     try {
-      await user.destroy(id);
+      await student.destroy(id);
 
       return res.status(200).json({ sucess: 'Student deleted with sucess.' });
     } catch (error) {
-      return res.json(400).json({ erro: 'Student delete failed.' });
+      return res.json(400).json({ error: 'Student delete failed.' });
     }
   }
 }

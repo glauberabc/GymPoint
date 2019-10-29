@@ -1,11 +1,19 @@
 import * as Yup from 'yup';
 import User from '../models/User';
+import File from '../models/File';
 
 class UserController {
   async index(req, res) {
     try {
       const user = await User.findAll({
-        attributes: { exclude: ['password_hash'] },
+        attributes: ['id', 'name', 'email', 'avatar_id'],
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['name', 'path', 'url'],
+          },
+        ],
       });
 
       return res.status(200).json(user);
@@ -118,7 +126,7 @@ class UserController {
 
       return res.status(200).json({ sucess: 'User deleted with sucess.' });
     } catch (error) {
-      return res.json(400).json({ erro: 'User delete failed.' });
+      return res.json(400).json({ error: 'User delete failed.' });
     }
   }
 }

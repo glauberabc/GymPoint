@@ -1,9 +1,11 @@
+require('dotenv/config');
+
 module.exports = {
   dialect: 'postgres',
-  host: 'localhost',
-  username: 'postgres',
-  password: 'c3e3e6298c626272b9f5210ffced152ab724ff9d',
-  database: 'gympoint',
+  host: process.env.DB_HOST,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
   define: {
     timestamp: true,
     underscored: true,
